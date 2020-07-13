@@ -5,10 +5,10 @@ LEFT JOIN customers
 ON employees.employeeNumber=customers.salesRepEmployeeNumber
 
 LEFT JOIN orders 
-ON orders.customerNumber=customers.customerNumber
+ON customers.customerNumber=orders.customerNumber
 
 LEFT JOIN orderdetails
-ON customers.salesRepEmployeeNumber=orderdetails.quantityOrdered
+ON orders.orderNumber=orderdetails.orderNumber
 
 GROUP BY employees.employeeNumber
 ORDER BY (orderdetails.priceEach * orderdetails.quantityOrdered) DESC;
