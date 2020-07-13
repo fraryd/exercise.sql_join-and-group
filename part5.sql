@@ -1,12 +1,14 @@
-SELECT CONCAT(employees.lastName,", ", employees.firstName) AS "Sales Rep", orderdetails.quantityOrdered AS "# Orders", 
-CONCAT (orderdetails.quantityOrdered * orderdetails.priceEach) AS "Total Sale"
+SELECT CONCAT(employees.lastName,", ", employees.firstName) AS "Sales Rep", IFNULL(orderdetails.quantityOrdered, 0) AS "# Orders", 
+IFNULL(orderdetails.priceEach * orderdetails.quantityOrdered, 0) AS "Total Sale"
 FROM employees
-
 LEFT JOIN customers
-ON employees.employeeNumber=customers.customerNumber
+ON employees.employeeNumber=customers.salesRepEmployeeNumber
+
+LEFT JOIN orders 
+ON orders.customerNumber=customers.customerNumber
 
 LEFT JOIN orderdetails
-ON customers.customerNumber=orderdetails.quantityOrdered
+ON customers.salesRepEmployeeNumber=orderdetails.quantityOrdered
 
 GROUP BY employees.employeeNumber
-ORDER BY (orderdetails.quantityOrdered * orderdetails.priceEach) DESC;
+ORDER BY (orderdetails.priceEach * orderdetails.quantityOrdered) DESC;
